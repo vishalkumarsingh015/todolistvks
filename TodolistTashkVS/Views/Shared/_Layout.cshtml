@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TodolistTashkVS</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TodolistTashkVS.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+          
+
+    <style>
+        .navbar {
+            background: linear-gradient(90deg, #0d6efd, #0a58ca);
+        }
+
+        .nav-link:hover {
+            color: #ffc107 !important;
+        }
+    </style>
+
+    <style>
+        .nav-link i:hover {
+            background-color: white;
+            color: #0d6efd;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm py-3">
+            <div class="container">
+
+                <!-- Logo + Brand -->
+                <a class="navbar-brand d-flex align-items-center fw-bold fs-4"
+                   asp-controller="Home" asp-action="Index">
+
+                    <img src="~/image/todo.jpg"
+                         alt="Logo"
+                         width="40"
+                         height="40"
+                         class="me-2 rounded-circle shadow-sm border border-white border-3">
+
+                    TodolistTashkVKS
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler border-0" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Menu -->
+                <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+                    <ul class="navbar-nav align-items-lg-center gap-lg-3">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-semibold"
+                               asp-controller="TodoList"
+                               asp-action="Index">
+                                <i class="bi bi-house-door me-1"></i> Todo
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-semibold"
+                               asp-controller="Home"
+                               asp-action="Privacy">
+                                <i class="bi bi-shield-lock me-1"></i> Privacy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-5"
+                               asp-controller="Todolist"
+                               asp-action="Adminlogin"
+                               title="Add User">
+                                <i class="fa fa-user-plus border border-white rounded-circle p-2"></i>
+                            </a>
+                        </li>
+
+                       @*  <li class="nav-item">
+                            <a class="btn btn-light text-primary fw-semibold px-4"
+                               asp-controller="Todolist"
+                               asp-action="Create">
+                                + Add Task
+                            </a>
+                        </li> *@
+
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer bg-primary text-white py-3">
+        <div class="container text-center">
+            &copy; @DateTime.Now.Year - TodolistTashkVS -
+            <a asp-controller="Home"
+               asp-action="Privacy"
+               class="text-white text-decoration-none fw-semibold">
+                Privacy
+            </a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
