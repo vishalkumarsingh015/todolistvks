@@ -33,7 +33,7 @@ namespace TodolistTashkVS.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]  //security
         public async Task<IActionResult> Create(CreateViewModels vm)
         {
 
