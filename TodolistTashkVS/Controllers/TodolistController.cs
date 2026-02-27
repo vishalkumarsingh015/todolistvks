@@ -40,6 +40,7 @@ namespace TodolistTashkVS.Controllers
             if (ModelState.IsValid)
             {
                 var model = vm.MapToModel();
+               
                 await _context.TodoLists.AddAsync(model); //in-momory
                 await _context.SaveChangesAsync();  //Write Sql Query Change Tracker
                 return RedirectToAction(nameof(Index));
