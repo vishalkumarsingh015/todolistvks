@@ -24,7 +24,8 @@ namespace TodolistTashkVS.Extensions
 
         public static TodoList MapToModel(this CreateViewModels vm)
         {
-            return new TodoList { Title = vm.Title, Description = vm.Description };
+
+            return new TodoList { Title = vm.Title, Description = vm.Description ,UserId=8};
         }
     }
 }

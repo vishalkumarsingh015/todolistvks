@@ -65,6 +65,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+@* @{
+        await Html.RenderComponentAsync("_ValidationScriptsPartial");RenderComponentAsync Blazor ke liye hota hai, MVC ke liye nahi.
+    } *@
 }
 @* 
                        asp:for type, id ,name,value banata hai  *@
