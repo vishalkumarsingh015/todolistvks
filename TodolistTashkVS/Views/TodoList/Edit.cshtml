@@ -1,0 +1,54 @@
+﻿@model TodolistTashkVS.ViewModels.TodoListViewModel
+
+@{
+    ViewData["Title"] = "Edit Todo";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm rounded">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Edit Todo</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        @* Anti-forgery token for security *@
+                        @Html.AntiForgeryToken()
+
+                        @* Hidden Id field *@
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label"></label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CreatedAt" class="form-label"></label>
+                            <input asp-for="CreatedAt" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">Update</button>
+                            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @* Validation scripts *@
+    <partial name="_ValidationScriptsPartial" />
+}

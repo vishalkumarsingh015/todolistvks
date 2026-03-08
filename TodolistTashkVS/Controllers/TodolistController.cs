@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TodolistTashkVS.Data;
 using TodolistTashkVS.Extensions;
@@ -40,12 +41,42 @@ namespace TodolistTashkVS.Controllers
             if (ModelState.IsValid)
             {
                 var model = vm.MapToModel();
-               
+
                 await _context.TodoLists.AddAsync(model); //in-momory
                 await _context.SaveChangesAsync();  //Write Sql Query Change Tracker
                 return RedirectToAction(nameof(Index));
             }
             return View(new CreateViewModels());
+        }
+
+        [HttpGet]  // get request
+        public async Task<IActionResult> Edit(int id)
+        {
+            var todo = await _context.TodoLists
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (todo == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var vm = todo.MapToViewModel();
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(TodoListViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var model = vm.MapToModel();
+                _context.TodoLists.Update(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
         }
 
 
