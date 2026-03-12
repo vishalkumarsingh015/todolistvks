@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TodolistTashkVS.Data;
 using TodolistTashkVS.Extensions;
 using TodolistTashkVS.ViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace TodolistTashkVS.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+    [Authorize]
     public class TodolistController : Controller
     {
         private ApplicationDbContext _context;
@@ -34,21 +37,30 @@ namespace TodolistTashkVS.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]  //security////
+        [ValidateAntiForgeryToken]  // security
         public async Task<IActionResult> Create(CreateViewModels vm)
         {
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var model = vm.MapToModel();
-
-                await _context.TodoLists.AddAsync(model); //in-momory
-                await _context.SaveChangesAsync();  //Write Sql Query Change Tracker
-                return RedirectToAction(nameof(Index));
+                return View(vm);
             }
-            return View(new CreateViewModels());
-        }
 
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int userId = Convert.ToInt32(userIdClaim.Value);
+
+            var model = vm.MapToModel(userId);
+
+            await _context.TodoLists.AddAsync(model); // in-memory
+            await _context.SaveChangesAsync(); // Write SQL Query Change Tracker
+
+            return RedirectToAction(nameof(Index));
+        }
         [HttpGet]  // get request
         public async Task<IActionResult> Edit(int id)
         {
@@ -69,16 +81,79 @@ namespace TodolistTashkVS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TodoListViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var model = vm.MapToModel();
-                _context.TodoLists.Update(model);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(vm);
             }
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int userId = Convert.ToInt32(userIdClaim.Value);
+
+            var model = vm.MapToModel(userId);
+
+            _context.TodoLists.Update(model);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int userId = Convert.ToInt32(userIdClaim.Value);
+
+            var todo = await _context.TodoLists
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+
+            if (todo == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var vm = todo.MapToViewModel();
+            return View(vm);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int userId = Convert.ToInt32(userIdClaim.Value);
+
+            var todo = await _context.TodoLists
+                .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+
+            if (todo == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.TodoLists.Remove(todo);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }

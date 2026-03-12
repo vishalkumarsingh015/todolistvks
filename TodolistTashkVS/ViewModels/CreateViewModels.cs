@@ -15,6 +15,6 @@ namespace TodolistTashkVS.ViewModels
 
         public string? Description { get; set; }
 
-        public int userId { get; set; }
+        public int UserId { get; set; }
     }
 }

@@ -10,15 +10,22 @@ namespace TodolistTashkVS.ViewModels
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set; } = string.Empty;
+        [StringLength(100)]
+        public required string Name { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Enter a valid email")]
-        public string Email { get; set; } = string.Empty;
+        [EmailAddress(ErrorMessage = "Enter valid email")]
+        [StringLength(150)]
+        public required string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
+        public required string Password { get; set; }
+
+        [Required(ErrorMessage = "Confirm Password is required")]
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Password and Confirm Password must match")]
+        public required string ConfirmPassword { get; set; }
 
     }
 }

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace TodolistTashkVS.ViewModels
 {
-    public class AdminLoginViewModel
+    public class LoginViewModel
     {
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Enter a valid email")]
-        public string Email { get; set; } = string.Empty;
+        [EmailAddress(ErrorMessage = "Enter valid email")]
+        public required string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
+        public required string Password { get; set; }
 
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
