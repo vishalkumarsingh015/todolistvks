@@ -13,52 +13,46 @@ namespace TodolistTashkVS.Configurations
     {
         public void Configure(EntityTypeBuilder<Tasks> builder)
         {
-            //primary key
+            // Primary Key
             builder.HasKey(t => t.Id);
 
-            //Title required
+            // Title
             builder.Property(t => t.Title)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            //Description required
-
+            // Description
             builder.Property(t => t.Description)
                 .IsRequired()
                 .HasMaxLength(300);
 
-            //status required
-
+            // ✅ Status (ENUM → STRING)
             builder.Property(t => t.Status)
+                .HasConversion<string>()
                 .IsRequired()
+                .HasDefaultValue(Status.Pending);
 
-                .HasMaxLength(20)
-             .HasDefaultValue("Pending");
-
-
-
-            //priority
-
+            // ✅ Priority (ENUM → STRING)
             builder.Property(t => t.Priority)
+                .HasConversion<string>()
+                .IsRequired()
+                .HasDefaultValue(Priority.Medium);
 
-                 .IsRequired();
-
-            //DueDate
+            // DueDate
             builder.Property(t => t.DueDate);
 
-            //CreatedAt
+            // CreatedAt
             builder.Property(t => t.CreatedAt)
                 .HasDefaultValueSql("GETDATE()");
 
-            //updatedAT
+            // UpdatedAt
             builder.Property(t => t.UpdatedAt);
 
-            //realtaion todolist-task one to many
-
+            // Relation (TodoList → Tasks)
             builder.HasOne(t => t.TodoList)
-       .WithMany(tl => tl.Tasks)
-       .HasForeignKey(t => t.TodoListId)
-       .OnDelete(DeleteBehavior.Cascade);
+                .WithMany(tl => tl.Tasks)
+                .HasForeignKey(t => t.TodoListId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 

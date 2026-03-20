@@ -15,7 +15,7 @@ namespace TodolistTashkVS.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(x => x.Tasks)
+            builder.HasOne(x => x.Task)
                    .WithMany(t => t.TaskTags)
                    .HasForeignKey(x => x.TasksId)
                    .OnDelete(DeleteBehavior.Cascade);

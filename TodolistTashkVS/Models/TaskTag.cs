@@ -11,8 +11,8 @@ namespace TodolistTashkVS.Models
     {
         public int Id { get; set; }
         public int TasksId { get; set; }
-        public Tasks Tasks { get; set; }
+        public Tasks? Task { get; set; }
         public int TagId { get; set; }
-        public Tag Tag { get; set; }
+        public Tag? Tag { get; set; }
     }
 }

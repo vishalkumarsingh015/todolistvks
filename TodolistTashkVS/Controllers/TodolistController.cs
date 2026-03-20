@@ -77,6 +77,20 @@ namespace TodolistTashkVS.Controllers
             return View(vm);
         }
 
+        public IActionResult Open(int Id)
+        {
+            var todo = _context.TodoLists.Find(Id);
+            var vm = todo.MapToViewModel();
+            if (vm == null)
+                return NotFound();
+            //return View(vm);
+
+            return RedirectToAction("Details", "Tasks", new {todolistId = Id });
+
+        }
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TodoListViewModel vm)
@@ -106,7 +120,7 @@ namespace TodolistTashkVS.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
             if (userIdClaim == null)
             {
@@ -132,7 +146,7 @@ namespace TodolistTashkVS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
             if (userIdClaim == null)
             {

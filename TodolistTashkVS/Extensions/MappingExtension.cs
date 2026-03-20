@@ -78,5 +78,22 @@ namespace TodolistTashkVS.Extensions
                 PasswordHash = vm.Password
             };
         }
+        public static List<TaskListViewModel> MapToViewModel(this List<Tasks>? taskList)
+        {
+            if (taskList == null)
+                return new List<TaskListViewModel>();
+
+            return taskList.Select(task => new TaskListViewModel
+            {
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Status = task.Status,
+                DueDate = task.DueDate,
+                Priority = task.Priority
+            }).ToList();
+        }
+
+
     }
 }
