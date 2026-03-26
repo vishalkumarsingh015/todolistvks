@@ -1,0 +1,49 @@
+﻿@model TodolistTashkVS.ViewModels.AddTagViewModel
+
+@{
+    ViewData["Title"] = "Edit Tag";
+}
+
+<div class="container mt-4">
+    <div class="card shadow border-0 col-md-6 mx-auto">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Edit Tag</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+
+                <input asp-for="Id" type="hidden" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter tag name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Color" class="form-label"></label>
+                    <input asp-for="Color" type="color" class="form-control form-control-color" />
+                    <span asp-validation-for="Color" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Preview</label><br />
+                    <span class="badge px-3 py-2" style="background-color:@Model.Color">
+                        @Model.Name
+                    </span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-warning">Update</button>
+                    <a asp-action="AddTagView" asp-controller="AddTag"
+                       asp-route-todoListId="@ViewBag.TodoListId" class="btn btn-secondary">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

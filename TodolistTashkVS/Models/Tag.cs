@@ -11,6 +11,7 @@ namespace TodolistTashkVS.Models
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Color { get; set; }
+        public int TodoListId { get; set; }
         public ICollection<TaskTag> TaskTags { get; set; } = new HashSet<TaskTag>();
     }
 }

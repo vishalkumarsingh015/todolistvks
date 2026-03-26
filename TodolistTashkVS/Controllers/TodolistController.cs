@@ -61,36 +61,30 @@ namespace TodolistTashkVS.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        [HttpGet]  // get request
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int userId = Convert.ToInt32(userIdClaim.Value);
+
             var todo = await _context.TodoLists
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
 
             if (todo == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
 
             var vm = todo.MapToViewModel();
-
             return View(vm);
         }
-
-        public IActionResult Open(int Id)
-        {
-            var todo = _context.TodoLists.Find(Id);
-            var vm = todo.MapToViewModel();
-            if (vm == null)
-                return NotFound();
-            //return View(vm);
-
-            return RedirectToAction("Details", "Tasks", new {todolistId = Id });
-
-        }
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TodoListViewModel vm)
@@ -109,13 +103,74 @@ namespace TodolistTashkVS.Controllers
 
             int userId = Convert.ToInt32(userIdClaim.Value);
 
-            var model = vm.MapToModel(userId);
+            var todo = await _context.TodoLists
+                .FirstOrDefaultAsync(x => x.Id == vm.Id && x.UserId == userId);
 
-            _context.TodoLists.Update(model);
+            if (todo == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            todo.Title = vm.Title;
+            todo.Description = vm.Description;
+
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Open(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int userId = Convert.ToInt32(userIdClaim.Value);
+
+            var todo = await _context.TodoLists
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+
+            if (todo == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction("Details", "Tasks", new { todolistId = id });
+        }
+
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(TodoListViewModel vm)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(vm);
+        //    }
+
+        //    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+        //    if (userIdClaim == null)
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
+
+        //    int userId = Convert.ToInt32(userIdClaim.Value);
+
+        //    var model = vm.MapToModel(userId);
+
+        //    _context.TodoLists.Update(model);
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)

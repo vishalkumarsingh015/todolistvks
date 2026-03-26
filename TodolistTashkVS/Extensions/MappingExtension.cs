@@ -1,4 +1,5 @@
-﻿using TodolistTashkVS.Models;
+﻿using Azure;
+using TodolistTashkVS.Models;
 using TodolistTashkVS.ViewModels;
 
 namespace TodolistTashkVS.Extensions
@@ -78,6 +79,43 @@ namespace TodolistTashkVS.Extensions
                 PasswordHash = vm.Password
             };
         }
+
+        public static List<AddTagViewModel> MapToViewModel(this IEnumerable<Tag>? tagslst)
+        {
+            return tagslst?.Select(
+                t => new AddTagViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Color = t.Color,
+                    TodoListId = t.TodoListId
+                }).ToList() ?? [];
+        }
+
+        public static AddTagViewModel? MapToViewModel(this Tag? tag)
+        {
+            if (tag == null) return null;
+
+            return new AddTagViewModel
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Color = tag.Color,
+                TodoListId = tag.TodoListId
+            };
+        }
+
+        public static Tag MapToModel(this AddTagViewModel vm)
+        {
+            return new Tag
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                Color = vm.Color,
+                TodoListId = vm.TodoListId
+            };
+        }
+
         public static List<TaskListViewModel> MapToViewModel(this List<Tasks>? taskList)
         {
             if (taskList == null)

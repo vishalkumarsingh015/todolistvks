@@ -58,7 +58,7 @@
 
                         <div class="d-flex gap-2 justify-content-center mt-4">
                             <button type="submit" class="btn btn-primary px-4 py-2 shadow-sm">Save</button>
-                            <a asp-action="Index" asp-controller="Todo" class="btn btn-outline-secondary px-4 py-2">Back</a>
+                            <a asp-action="Details" asp-controller="Tasks" asp-route-todolistId="@Model.TodoListId" class="btn btn-outline-secondary px-4 py-2">Back</a>
                         </div>
                     </form>
                 </div>

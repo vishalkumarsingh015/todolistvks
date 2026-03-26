@@ -34,6 +34,7 @@
                             <h5 class="fw-bold text-dark mb-2">@tasks.Title</h5>
 
                             <p class="text-muted small mb-2">
+                                <strong>Description :</strong>
                                 @tasks.Description
                             </p>
 
@@ -49,10 +50,18 @@
                             <div class="d-flex gap-2">
                                 <a class="btn btn-sm btn-outline-primary"
                                    asp-action="AddTagView"
-                                   asp-controller="AddTag">
+                                   asp-controller="AddTag"
+                                   asp-route-todoListId="@ViewBag.TodoListId">
                                     Tag
                                 </a>
                             </div>
+                          @*   <div class="d-flex gap-2">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   asp-action="AddTagView"
+                                   asp-controller="AddTag">
+                                    Edit
+                                </a>
+                            </div> *@
 
                         </div>
                     </div>
@@ -154,7 +163,7 @@
     <div class="text-center mt-5">
         <!-- 👈 spacing increased -->
         <a class="btn btn-outline-primary px-4 py-2"
-           asp-controller="Todo"
+           asp-controller="Todolist"
            asp-action="Index">
             ← Back
         </a>
