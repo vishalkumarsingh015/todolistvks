@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Azure;
 using TodolistTashkVS.Models;
 using TodolistTashkVS.ViewModels;
 
@@ -11,20 +6,132 @@ namespace TodolistTashkVS.Extensions
 {
     public static class MappingExtension
     {
-
         public static List<TodoListViewModel> MapToViewModel(this List<TodoList> list)
         {
             var vmList = new List<TodoListViewModel>();
+
             foreach (var todo in list)
             {
-                vmList.Add(new TodoListViewModel { Id = todo.Id, Title = todo.Title, Description = todo.Description, CreatedAt = todo.CreatedAt });
+                vmList.Add(new TodoListViewModel
+                {
+                    Id = todo.Id,
+                    UserId = todo.UserId,
+                    Title = todo.Title,
+                    Description = todo.Description,
+                    CreatedAt = todo.CreatedAt
+                });
             }
+
             return vmList;
         }
 
-        public static TodoList MapToModel(this CreateViewModels vm)
+        public static TodoListViewModel MapToViewModel(this TodoList todoList)
         {
-            return new TodoList { Title = vm.Title, Description = vm.Description };
+            return new TodoListViewModel
+            {
+                Id = todoList.Id,
+                UserId = todoList.UserId,
+                Title = todoList.Title,
+                Description = todoList.Description,
+                CreatedAt = todoList.CreatedAt
+            };
         }
+
+        public static TodoList MapToModel(this CreateViewModels vm, int userId)
+        {
+            return new TodoList
+            {
+                Title = vm.Title,
+                Description = vm.Description,
+                UserId = userId,
+                CreatedAt = DateTime.UtcNow
+            };
+        }
+
+        public static TodoList MapToModel(this TodoListViewModel vm, int userId)
+        {
+            return new TodoList
+            {
+                Id = vm.Id,
+                UserId = userId,
+                Title = vm.Title,
+                Description = vm.Description,
+                CreatedAt = vm.CreatedAt
+            };
+        }
+
+        public static User MapToUser(this RegisterViewModel vm)
+        {
+            return new User
+            {
+                Name = vm.Name,
+                Email = vm.Email,
+                PasswordHash = vm.Password
+            };
+        }
+
+        public static User MapToUser(this LoginViewModel vm)
+        {
+            return new User
+            {
+                Name = string.Empty,
+                Email = vm.Email,
+                PasswordHash = vm.Password
+            };
+        }
+
+        public static List<AddTagViewModel> MapToViewModel(this IEnumerable<Tag>? tagslst)
+        {
+            return tagslst?.Select(
+                t => new AddTagViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Color = t.Color,
+                    TodoListId = t.TodoListId
+                }).ToList() ?? [];
+        }
+
+        public static AddTagViewModel? MapToViewModel(this Tag? tag)
+        {
+            if (tag == null) return null;
+
+            return new AddTagViewModel
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Color = tag.Color,
+                TodoListId = tag.TodoListId
+            };
+        }
+
+        public static Tag MapToModel(this AddTagViewModel vm)
+        {
+            return new Tag
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                Color = vm.Color,
+                TodoListId = vm.TodoListId
+            };
+        }
+
+        public static List<TaskListViewModel> MapToViewModel(this List<Tasks>? taskList)
+        {
+            if (taskList == null)
+                return new List<TaskListViewModel>();
+
+            return taskList.Select(task => new TaskListViewModel
+            {
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Status = task.Status,
+                DueDate = task.DueDate,
+                Priority = task.Priority
+            }).ToList();
+        }
+
+
     }
 }

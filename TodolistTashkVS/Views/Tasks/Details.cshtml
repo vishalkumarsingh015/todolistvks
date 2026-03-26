@@ -1,0 +1,184 @@
+﻿@using TodolistTashkVS.ViewModels
+@model List<TaskListViewModel>
+
+<div class="container mt-5 mb-5">
+    <!-- 👈 bottom margin added -->
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-primary">📋 @ViewBag.Title</h3>
+
+        <a class="btn btn-primary shadow-sm"
+           asp-controller="Tasks"
+           asp-action="Create"
+           asp-route-todoListId="@ViewBag.TodoListId">
+            + Add Task
+        </a>
+    </div>
+
+    <!-- TASK LIST -->
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            No Tasks Available 🚀
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var tasks in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded-4 h-100 task-card">
+                        <div class="card-body">
+
+                            <h5 class="fw-bold text-dark mb-2">@tasks.Title</h5>
+
+                            <p class="text-muted small mb-2">
+                                <strong>Description :</strong>
+                                @tasks.Description
+                            </p>
+
+                            <div class="mb-2">
+                                <span class="badge bg-info text-dark">@tasks.Status</span>
+                                <span class="badge bg-warning text-dark">@tasks.Priority</span>
+                            </div>
+
+                            <div class="small text-muted mb-3">
+                                📅 @tasks.DueDate?.ToString("dd MMM yyyy")
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   asp-action="AddTagView"
+                                   asp-controller="AddTag"
+                                   asp-route-todoListId="@ViewBag.TodoListId">
+                                    Tag
+                                </a>
+                            </div>
+                          @*   <div class="d-flex gap-2">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   asp-action="AddTagView"
+                                   asp-controller="AddTag">
+                                    Edit
+                                </a>
+                            </div> *@
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- SUBTASKS -->
+    <div class="card shadow-sm border-0 rounded-4 mt-4">
+        <div class="card-header bg-primary text-white fw-bold">
+            ✅ SubTasks
+        </div>
+
+        <div class="card-body">
+
+            @if (ViewBag.SubTasklst == null)
+            {
+                <p class="text-muted">No subtasks found</p>
+            }
+            else
+            {
+                @foreach (var subtasks in ViewBag.SubTasklst)
+                {
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+
+                        <div>
+                            <input type="checkbox"
+                                   class="form-check-input me-2"
+                                   @(subtasks.IsCompleted ? "checked" : "")
+                                   disabled />
+
+                            <span>@subtasks.Title</span>
+                        </div>
+
+                        <a class="btn btn-sm btn-outline-success"
+                           asp-controller="SubTasks"
+                           asp-action="EditSubTask"
+                           asp-route-subtaskId="@subtasks.Id">
+                            Edit
+                        </a>
+
+                    </div>
+                }
+            }
+
+            <div class="mt-3 text-end">
+                <a class="btn btn-success btn-sm"
+                   asp-action="ViewSubTasks"
+                   asp-route-taskId="@ViewBag.TaskId">
+                    + Add SubTask
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="card shadow-sm border-0 rounded-4 mt-4">
+        <div class="card-header bg-warning text-dark fw-bold">
+            📝 Notes
+        </div>
+
+        <div class="card-body">
+            <p class="text-muted">@ViewBag.Notes</p>
+
+            <div class="text-end">
+                <a class="btn btn-warning btn-sm"
+                   asp-action="AddNotes"
+                   asp-route-notetaskId="@ViewBag.TaskId"
+                   asp-route-TodoId="@ViewBag.TodoId">
+                    + Add Note
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- REMINDER -->
+    <div class="card shadow-sm border-0 rounded-4 mt-4">
+        <div class="card-header bg-info text-dark fw-bold">
+            ⏰ Reminder
+        </div>
+
+        <div class="card-body">
+            <p class="text-muted">
+                📅 @ViewBag.RemindAt
+            </p>
+
+            <div class="text-end">
+                <a class="btn btn-info btn-sm text-dark"
+                   asp-action="AddRemainders"
+                   asp-route-taskid="@ViewBag.TaskId">
+                    + Add Reminder
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BACK BUTTON -->
+    <div class="text-center mt-5">
+        <!-- 👈 spacing increased -->
+        <a class="btn btn-outline-primary px-4 py-2"
+           asp-controller="Todolist"
+           asp-action="Index">
+            ← Back
+        </a>
+    </div>
+
+</div>
+
+<!-- ✨ EXTRA STYLE -->
+<style>
+    .task-card {
+        transition: all 0.3s ease;
+    }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+</style>

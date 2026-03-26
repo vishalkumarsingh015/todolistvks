@@ -22,7 +22,7 @@
                     <!-- Title -->
                     <div class="mb-3">
                         <label asp-for="Title" class="form-label fw-semibold"></label>
-
+                   
                         <input asp-for="Title"
                                class="form-control form-control-lg shadow-sm"
                                placeholder="Enter task title" />
@@ -65,6 +65,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+@* @{
+        await Html.RenderComponentAsync("_ValidationScriptsPartial");RenderComponentAsync Blazor ke liye hota hai, MVC ke liye nahi.
+    } *@
 }
 @* 
                        asp:for type, id ,name,value banata hai  *@

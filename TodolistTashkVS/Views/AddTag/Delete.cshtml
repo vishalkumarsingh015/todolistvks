@@ -1,0 +1,41 @@
+﻿@model TodolistTashkVS.ViewModels.AddTagViewModel
+
+@{
+    ViewData["Title"] = "Delete Tag";
+}
+
+<div class="container mt-4">
+    <div class="card shadow border-0 col-md-6 mx-auto">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Delete Tag</h4>
+        </div>
+        <div class="card-body">
+            <h5>Are you sure you want to delete this tag?</h5>
+            <hr />
+
+            <div class="mb-3">
+                <strong>Name:</strong> @Model.Name
+            </div>
+
+            <div class="mb-3">
+                <strong>Color:</strong> @Model.Color
+            </div>
+
+            <div class="mb-3">
+                <strong>Preview:</strong><br />
+                <span class="badge px-3 py-2" style="background-color:@Model.Color">
+                    @Model.Name
+                </span>
+            </div>
+
+            <form asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input asp-for="Id" type="hidden" />
+
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a asp-action="AddTagView" asp-controller="AddTag"
+                   asp-route-todoListId="@Model.TodoListId" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

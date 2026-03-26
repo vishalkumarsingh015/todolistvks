@@ -9,11 +9,12 @@ namespace TodolistTashkVS.ViewModels
 {
     public class CreateViewModels
     {
-        [Required]
+        [Display(Name = "Titles")]  
+        [Required(ErrorMessage ="Title Field can not be nulll")]  //client side validation
         public string Title { get; set; } = string.Empty;
 
         public string? Description { get; set; }
 
-        public int userId { get; set; }
+        public int UserId { get; set; }
     }
 }

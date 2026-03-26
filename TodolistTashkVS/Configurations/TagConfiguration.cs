@@ -18,16 +18,15 @@ namespace TodolistTashkVS.Configurations
             builder.HasKey(t => t.Id);
 
             builder.Property(t => t.Name)
-                 .IsRequired()
-                 .HasMaxLength(50);
+                .IsRequired()
+                .HasMaxLength(50);
 
             builder.Property(t => t.Color)
-                  .IsRequired()
-                  .HasMaxLength(20);
+                .IsRequired()
+                .HasMaxLength(20);
 
-            builder.HasIndex(t => t.Name)
+            builder.HasIndex(t => new { t.Name, t.TodoListId })
                 .IsUnique();
-
             //->Same naam ka tag dobara add nahi ho sakta
         }
     }

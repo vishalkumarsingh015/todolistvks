@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using TodolistTashkVS.Data;
 namespace TodolistTashkVS
@@ -19,7 +20,19 @@ namespace TodolistTashkVS
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // =============================
+            // Authentication (Login System)
+            // =============================
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Account/Login";
+                    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                    options.SlidingExpiration = true;
+                });
 
+            builder.Services.AddAuthorization();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -32,13 +45,14 @@ namespace TodolistTashkVS
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            // Authentication middleware
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+               pattern: "{controller=Account}/{action=Login}/{id?}")
 
                 .WithStaticAssets(); 
 
